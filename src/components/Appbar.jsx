@@ -140,7 +140,7 @@ export default function ElevateAppBar(props) {
         <React.Fragment>
 
             <ElevationScroll {...props}>
-                <AppBar>
+                <AppBar sx={{height:"8vh"}}>
                     <Container maxWidth="xl">
                         <Toolbar disableGutters>
                             <Typography

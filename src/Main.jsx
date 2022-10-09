@@ -12,9 +12,8 @@ function Main() {
 
     return (
         <>
-
-            {/* <ErrorBoundary> */}
-            <Suspense fallback={<FallBackLoader />}>
+            {/* <ErrorBoundary>  */}
+             <Suspense fallback={<FallBackLoader />}>
                 <BrowserRouter>
                     <ResponsiveAppBar />
                     <Routes>
@@ -25,8 +24,8 @@ function Main() {
                         ))}
                     </Routes>
                 </BrowserRouter>
-            </Suspense>
-            {/* </ErrorBoundary> */}
+            </Suspense> 
+           {/* </ErrorBoundary> */}
         </>
     )
 }
