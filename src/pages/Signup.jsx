@@ -225,7 +225,7 @@ hasError={hasError}
   />
     </Grid>
     <Grid item>
-    {t('rules')}
+    {t('rules')} 
       </Grid>
   </Grid>
  
