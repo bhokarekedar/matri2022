@@ -6,9 +6,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useTranslation } from "react-i18next";
 
-function CustomSelectField({name, value, label, handleChangeSelectField, valuesForSelectField, helperText, hasError}) {
+function CustomSelectField({name, value, label, handleChange, valuesForSelectField, helperText, hasError}) {
   const { t } = useTranslation();
- 
  return ( <FormControl sx={{ minWidth: "100%" }} >
     <InputLabel id="demo-simple-select-helper-label">{label}</InputLabel>
     <Select
@@ -17,8 +16,8 @@ function CustomSelectField({name, value, label, handleChangeSelectField, valuesF
       value={value}
       label={label}
       name={name}
-      onChange={handleChangeSelectField}
-    >{ valuesForSelectField.map(item => <MenuItem key={item} value={item}> {t(`${item}`)}</MenuItem>) }
+      onChange={handleChange}
+    >{ valuesForSelectField.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>) }
     </Select>
     {hasError && <FormHelperText>{helperText}</FormHelperText>} 
   </FormControl>

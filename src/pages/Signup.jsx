@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import { useTranslation } from "react-i18next";
@@ -21,6 +19,8 @@ import CustomRadioButton from "../customFields/CustomRadioButton";
 import CustomSelectField from "../customFields/CustomSelectField";
 import CustomCheckBox from "../customFields/CustomCheckBox";
 import { appConstants } from "../constants/appConstants";
+import { errorsLisMh, errorsListEn } from "../constants/errorMessages";
+import FormArea from "../layout/FormArea";
 
 function Copyright(props) {
   const { t } = useTranslation();
@@ -31,9 +31,9 @@ function Copyright(props) {
       align="center"
       {...props}
     >
-      {t('Copyright')}
+      {t("Copyright")}
       <Link color="inherit" href="">
-      {t('bhoiMangalVivah')}
+        {t("bhoiMangalVivah")}
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -42,217 +42,262 @@ function Copyright(props) {
 }
 
 export default function Signup() {
-  const [errorForCheckBox, setErrorForCheckBox] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
   const { t, i18n } = useTranslation();
 
-const lablesForRadio = ["Male", "Female"];
-const valuesForSelectField = ["unamrried", "widower", "widow", "divorced"];
+  const lablesForRadio = ["Male", "Female"];
+  const valuesForSelectField = ["unamrried", "widower", "widow", "divorced"];
+  const errorList = {};
   const fields = {
-[[appConstants.firstname]]: "",
-[appConstants.fathersName]: "",
-[appConstants.sirname]: "",
-[appConstants.email]: "",
-[appConstants.password]: "",
-[appConstants.cpassword]: "",
-[appConstants.gender]:"Female",
-[appConstants.maritalStatus]:"",
+    [appConstants.firstname]: "",
+    [appConstants.fathersName]: "",
+    [appConstants.sirname]: "",
+    [appConstants.mobileNumber]: "",
+    [appConstants.email]: "",
+    [appConstants.password]: "",
+    [appConstants.cpassword]: "",
+    [appConstants.gender]: "Female",
+    [appConstants.maritalStatus]: "",
   };
+  const errorsArray = i18n.language == "mh" ? errorsLisMh : errorsListEn;
 
-  const notRequiredFields=[appConstants.fathersName];
-  
+  useEffect(() => {
+    for (const field in fields) {
+      for (const error in errorsArray) {
+        if (error.includes("Length") && `${field}Length` === error) {
+          errorList[error] = errorsArray[error];
+        }
+        if (error.includes("Pattern") && `${field}Pattern` === error) {
+          errorList[error] = errorsArray[error];
+        }
+        if (error.includes("Match") && `${field}Match` === error) {
+          errorList[error] = errorsArray[error];
+        }
+        if (error === field) {
+          errorList[field] = errorsArray[error];
+        }
+      }
+    }
+  }, [errorList, errorsArray]);
+
+  const notRequiredFields = [appConstants.fathersName];
   const [checked, setChecked] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
+  const { handleChangeForTextField, values, errors, hasError, errorsArea } =
+    useForm(validate, fields, notRequiredFields, errorList);
 
+  //console.log("values", values, errors);
   const handleChangeForCheckBox = (event) => {
     setChecked(event.target.checked);
   };
 
-  const {
-    handleChangeForTextField,
-    values,
-    errors,
-    hasError,
-  } = useForm(validate, fields, notRequiredFields, i18n.language);
+  useEffect(() => {
+    if (checked && Object.keys(errorsArea).length === 0) {
+      setIsDisabled(false);
+    }
+    if (!checked) {
+      setIsDisabled(true);
+    }
+  }, [checked, errorsArea]);
 
   const handleSubmit = (e) => {
-    if(!checked){
-      setErrorForCheckBox(true)
+    if (hasError) {
+      setErrorMessage(true);
     }
-    else{
-      if(hasError){
-        setErrorForCheckBox(true)
-      }
-      else{
-        setErrorForCheckBox(false);
-        e.preventDefault();
-      }
-      
-      
+    if (!hasError && checked && Object.keys(errorsArea).length === 0) {
+      setErrorMessage(false);
+      alert("ggg");
     }
-   
-  }; 
+  };
+
+  const formArea = [
+    {
+      field: "CustomTextField",
+      lengthForDesktop: 12,
+      lengthForMobile: 12,
+      name: appConstants.firstname,
+      value: values.firstname,
+      errorVal: "firstname",
+      optionValues: "",
+    },
+    {
+      field: "CustomTextField",
+      lengthForDesktop: 12,
+      lengthForMobile: 12,
+      name: appConstants.fathersName,
+      value: values.fathersName,
+      errorVal: "fathersName",
+      optionValues: "",
+    },
+    {
+      field: "CustomTextField",
+      lengthForDesktop: 12,
+      lengthForMobile: 12,
+      name: appConstants.sirname,
+      value: values.sirname,
+      errorVal: "sirname",
+      optionValues: "",
+    },
+    {
+      field: "CustomTextField",
+      lengthForDesktop: 12,
+      lengthForMobile: 12,
+      name: appConstants.mobileNumber,
+      value: values.mobileNumber,
+      errorVal: "mobileNumber",
+      optionValues: "",
+    },
+    {
+      field: "CustomTextField",
+      lengthForDesktop: 12,
+      lengthForMobile: 12,
+      name: appConstants.email,
+      value: values.email,
+      errorVal: "email",
+      optionValues: "",
+    },
+    {
+      field: "CustomTextField",
+      lengthForDesktop: 12,
+      lengthForMobile: 12,
+      name: appConstants.password,
+      value: values.password,
+      errorVal: "password",
+      optionValues: "",
+    },
+    {
+      field: "CustomTextField",
+      lengthForDesktop: 12,
+      lengthForMobile: 12,
+      name: appConstants.cpassword,
+      value: values.cpassword,
+      errorVal: "cpassword",
+      optionValues: "",
+    },
+    {
+      field: "CustomRadioButton",
+      lengthForDesktop: 12,
+      lengthForMobile: 12,
+      name: appConstants.gender,
+      value: values.gender,
+      errorVal: "gender",
+      optionValues: lablesForRadio,
+    },
+    {
+      field: "CustomSelectField",
+      lengthForDesktop: 12,
+      lengthForMobile: 12,
+      name: appConstants.maritalStatus,
+      value: values.maritalStatus,
+      errorVal: "maritalStatus",
+      optionValues: valuesForSelectField,
+    },
+
+    
+  ];
+
 
   return (
     <FullHeight>
-     
-          <FormLayout>
-            <CenterItem>
-              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-                <LockOutlinedIcon />
-              </Avatar>
-            </CenterItem >
-            <CenterItem >
-              <Typography component="h1" variant="h5">
-              {t('nameRegister')}
-              </Typography>
-            </CenterItem>
+      <FormLayout>
+        <CenterItem>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+        </CenterItem>
+        <CenterItem>
+          <Typography component="h1" variant="h5">
+            {t("nameRegister")}
+          </Typography>
+        </CenterItem>
+        <FormArea data={formArea} />
+        {/* <Grid container spacing={2} sx={{ mt: 1 }}>
 
-            <Grid container spacing={2} sx={{mt:1}}>
-  <Grid item xs={12} md={4}>
-  <CustomTextField
-              label={t(appConstants.firstname)}
-              name={appConstants.firstname}
-              id={appConstants.firstname}
-              value={values.firstname}
-              handleChangeTextField={handleChangeForTextField}
-              helperText={errors?.firstname}
-              hasError={hasError}
-            />
-  </Grid>
-  <Grid item xs={12} md={4}>
-  <CustomTextField
-              label={t(appConstants.fathersName)}
-              name={appConstants.fathersName}
-              id={appConstants.fathersName}
-              value={values.fathersName}
-              handleChangeTextField={handleChangeForTextField}
-              helperText={errors?.fathersName}
-              hasError={hasError}
-            />
-  </Grid>
-  <Grid item xs={12} md={4}>
-  <CustomTextField
-              label={t(appConstants.sirname)}
-              name={appConstants.sirname}
-              id={appConstants.sirname}
-              value={values.sirname}
-              handleChangeTextField={handleChangeForTextField}
-              helperText={errors?.sirname}
-              hasError={hasError}
-            />
-  </Grid>
-  <Grid item xs={12} md={12}>
-  <CustomTextField
-              label={t(appConstants.mobileNumber)}
-              name={appConstants.mobileNumber}
-              id={appConstants.mobileNumber}
-              value={values.mobileNumber}
-              handleChangeTextField={handleChangeForTextField}
-              helperText={errors?.mobileNumber}
-              hasError={hasError}
-             
-            />
-  </Grid>
-  <Grid item xs={12} md={12}>
-  <CustomTextField
-              label={t(appConstants.email)}
-              name={appConstants.email}
-              id={appConstants.email}
-              value={values.email}
-              handleChangeTextField={handleChangeForTextField}
-              helperText={errors?.email}
-              hasError={hasError}
-             
-            />
-  </Grid>
-  <Grid item xs={12} md={12}>
-  <CustomTextField
-              label={t(appConstants.password)}
-              name={appConstants.password}
-              id={appConstants.password}
-              value={values.password}
-              handleChangeTextField={handleChangeForTextField}
-              helperText={errors?.password}
-              hasError={hasError}
-             
-            />
-  </Grid>
+          {formArea.map(
+            (
+              {
+                field,
+                name,
+                lengthForDesktop,
+                lengthForMobile,
+                value,
+                errorVal,
+                optionValues,
+              }
+            ) => {
+              if (field === "CustomDateField") {
+                return (
+                  <Grid item xs={lengthForMobile} md={lengthForDesktop}>
+                    <CustomDateField
+                      label={t(name)}
+                      name={name}
+                      id={name}
+                      value={value}
+                      handleChange={(e) => {
+                        handleChange(e, name);
+                      }}
+                      helperText={errors?.[errorVal]}
+                      hasError={hasError}
+                    />
+                  </Grid>
+                );
+              } else if (field === "CustomSelectField") {
+                return (
+                  <Grid item xs={lengthForMobile} md={lengthForDesktop}>
+                    <CustomSelectField
+                      label={t(name)}
+                      name={name}
+                      value={value}
+                      helperText={errors?.[errorVal]}
+                      valuesForSelectField={optionValues}
+                      handleChange={handleChange}
+                      hasError={hasError}
+                    />
+                  </Grid>
+                );
+              } else if (field === "CustomTextField") {
+                return (
+                  <Grid item xs={lengthForMobile} md={lengthForDesktop}>
+                    <CustomTextField
+                      label={t(name)}
+                      name={name}
+                      id={name}
+                      value={value}
+                      handleChange={handleChange}
+                      helperText={errors?.[errorVal]}
+                      hasError={hasError}
+                    />
+                  </Grid>
+                );
+              } else if (field === "CustomRadioButton") {
+                return ( 
+                 <Grid item xs={lengthForMobile} md={lengthForDesktop}>
+                <CustomRadioButton
+                  label={t(name)}
+                  name={name}
+                  id={name}
+                  value={value}
+                  lablesForRadio={optionValues}
+                  handleChange={handleChange}
+                />
+                 </Grid>
+                  );
+              }
+            }
+          )}
+        </Grid> */}
 
-  <Grid item xs={12} md={12}>
-  <CustomTextField
-              label={t(appConstants.cpassword)}
-              name={appConstants.cpassword}
-              id={appConstants.cpassword}
-              value={values.cpassword}
-              handleChangeTextField={handleChangeForTextField}
-              helperText={errors?.cpassword}
-              hasError={hasError}
-             
-            />
-  </Grid>
-
-  <Grid item xs={12} md={12}>
-  <CustomRadioButton
-  label={t(appConstants.gender)}
-  name={appConstants.gender}
-  value={values.gender}
-  lablesForRadio={lablesForRadio}
-  handleChangeRadioButton={handleChangeForTextField}
-  />
-  </Grid>
-  <Grid item xs={12} md={12}>
-<CustomSelectField
-name={appConstants.maritalStatus}
-label={t(appConstants.maritalStatus)}
-value={values.maritalStatus}
-valuesForSelectField={valuesForSelectField}
-handleChangeSelectField={handleChangeForTextField}
-helperText={errors?.maritalStatus}
-hasError={hasError}
-/>
-  </Grid>
-  <Grid item xs={12} md={12}>
-  <Grid
-  container
-  direction="row"
-  justifyContent="flex-start"
-  alignItems="center"
-
-  >
-    <Grid item>
-    <CustomCheckBox
-  checked={checked}
-  handleChangeForCheckBox={handleChangeForCheckBox}
-  />
-    </Grid>
-    <Grid item>
-    {t('rules')} 
-      </Grid>
-  </Grid>
- 
-  </Grid>
-
-  <Grid item  xs={12} md={12}>
-    {
-      hasError ? <div className="errorMessage">{t('fillAllTheFields')}</div> : // if 
-      errorForCheckBox ? <div className="errorMessage">{t('ruleAgree')}</div> : //else if 
-      null // else 
-    }
-  </Grid>
-</Grid>
-           
-           
-            <Button
-              type="submit"
-              fullWidth
-              onClick={handleSubmit}
-              variant="contained"
-              sx={{ mt: 2, mb: 2 }}
-            >
-              {t('signup')} 
-            </Button>
-        
-          </FormLayout>
-
+        <Button
+          type="submit"
+          fullWidth
+         // disabled={isDisabled}
+          onClick={handleSubmit}
+          variant="contained"
+          sx={{ mt: 2, mb: 2 }}
+        >
+          {t("signup")}
+        </Button>
+      </FormLayout>
     </FullHeight>
   );
 }

@@ -2,6 +2,7 @@ import HomePage from "../pages/HomePage";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
 import Signup from "../pages/Signup";
+import SignupMain from "../pages/SignupMain";
 import UserInfo from "../pages/UserInfo";
 import Users from "../pages/Users";
 
@@ -25,6 +26,10 @@ export const main_routes = [
     {
         path: "/Signup",
         Component: Signup
+    },
+    {
+        path: "/SignupMain",
+        Component: SignupMain
     },
     {
         path: "/UserInfo/:id",

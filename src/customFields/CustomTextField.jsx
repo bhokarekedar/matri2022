@@ -1,12 +1,20 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
 
-function CustomTextField({value, name, label, id, handleChangeTextField, helperText, hasError}) {
+function CustomTextField({
+  value,
+  name,
+  label,
+  id,
+  handleChange,
+  helperText,
+  hasError,
+}) {
   return (
     <>
       <TextField
         value={value}
-        onChange={handleChangeTextField}
+        onChange={handleChange}
         required
         fullWidth
         id={id}
