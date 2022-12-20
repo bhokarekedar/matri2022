@@ -1,18 +1,94 @@
 import { useState, useEffect } from "react";
+import validate from "../helper/validator";
 
-const useForm = (
-  validate,
-  fields,
-  notRequiredFields,
-  errorList,
-) => {
+const useForm = (fields, notRequiredFields, errorList, formArea) => {
   const [values, setValues] = useState(fields);
   const [isRequired, setIsRequired] = useState(true);
-  const [errors, setErrors] = useState({});
-  const [errorField, setErrorField] = useState("");
-  const [errorsArea, setErrorsArea] = useState(errorList);
+  const [errorsList, setErrorsList] = useState({});
+  const [currentError, setCurrentError] = useState("");
   const [hasError, setHasError] = useState(false);
+  let errors = {};
 
+  console.log("formAreaa", formArea);
+  useEffect(() => {
+    formArea.map((val) => {
+      const validation = val.validations;
+
+      if (validation.isRequired) {
+        let req = [val.name];
+        req = `${req}Required`
+        errors = {
+          ...errors,
+          [req]: "required",
+        };
+        setErrorsList((errorsList) => ({
+          ...errorsList,
+          ...errors
+        }));
+      }
+      if (validation.min) {
+        let min = [val.name];
+        min = `${min}Minimum`
+        errors = {
+          ...errors,
+          [min]: "minimum",
+        };
+        setErrorsList((errorsList) => ({
+          ...errorsList,
+          ...errors
+        }));
+      }
+      if (validation.max) {
+        let max = [val.name];
+        max = `${max}Maximum`
+        errors = {
+          ...errors,
+          [max]: "max",
+        };
+        setErrorsList((errorsList) => ({
+          ...errorsList,
+          ...errors
+        }));
+      }
+      if (validation.match) {
+        let match = [val.name];
+        match = `${match}Match`
+        errors = {
+          ...errors,
+          [match]: " MAXIMUM",
+        };
+        setErrorsList((errorsList) => ({
+          ...errorsList,
+          ...errors
+        }));
+      }
+      if (validation.pattern) {
+        let pattern = [val.name];
+        pattern = `${pattern}Pattern`
+        errors = {
+          ...errors,
+          [pattern]: "pattern",
+        };
+        setErrorsList((errorsList) => ({
+          ...errorsList,
+          ...errors
+        }));
+      } else {
+        errors = {
+          ...errors,
+          [val.name]: "",
+        };
+        setErrorsList((errorsList) => ({
+          ...errorsList,
+          ...errors
+        }));
+      }
+    });
+  }, [formArea]);
+
+  setTimeout(() => {
+    console.log("errorsList", errorsList);
+  }, 2000);
 
   const handleChange = async (e, nameForDate = "") => {
     let name = "";
@@ -25,50 +101,57 @@ const useForm = (
       name = e.target.name;
       value = e.target.value;
     }
-    console.log("ddd", e.target);
 
     if (notRequiredFields?.includes(name)) {
       setIsRequired(false);
     }
     setIsRequired(true);
-    setErrorField(name);
+    //setErrorField(name);
 
     await setValues({
-      ...fields,
+      ...values,
       [name]: value,
     });
+
+    let validations = formArea.filter((val) => val.name === name);
+    if (validations) {
+      validations = validations[0].validations;
+    }
     const errs = await validate(
       name,
       value,
       isRequired,
       fields.password,
-      errorList
+      errorList,
+      validations
     );
-    setErrors(errs);
+    setCurrentError(errs);
 
-    console.log("errorList", errorsArea);
+    console.log("errorList", errors);
   };
 
-  useEffect(() => {
-    // if (!hasError && isSubmitting) {
-    //   callback();
-    // }
+  // useEffect(() => {
+  //   if (errors?.[errorField] !== "") {
+  //     setHasError(true);
+  //   }
+  //   if (!errors?.[errorField]) {
+  //     delete errorsArea[errorField];
+  //     delete errorsArea[`${errorField}Length`];
+  //     delete errorsArea[`${errorField}Pattern`];
+  //     delete errorsArea[`${errorField}Match`];
+  //     delete errorsArea[`${errorField}AgeDiff`];
+  //     setErrorsArea(errorsArea);
+  //     setHasError(false);
+  //   }
+  // }, [errors, errorsArea]);
 
-    if (errors?.[errorField] !== "") {
-      setHasError(true);
-    }
-    if (!errors?.[errorField]) {
-      delete errorsArea[errorField];
-      delete errorsArea[`${errorField}Length`];
-      delete errorsArea[`${errorField}Pattern`];
-      delete errorsArea[`${errorField}Match`];
-      delete errorsArea[`${errorField}AgeDiff`];
-      setErrorsArea(errorsArea);
-      setHasError(false);
-    }
-  }, [errors, errorsArea]);
-
-  return { handleChange, values, errors, hasError, errorsArea };
+  return {
+    handleChange,
+    values,
+    errors,
+    hasError,
+    // errorsArea
+  };
 };
 
 export default useForm;

@@ -6,36 +6,41 @@ import FormLayout from "../layout/FormLayout";
 import CenterItem from "../layout/CenterItem";
 import FullHeight from "../layout/FullHeight";
 import { appConstants } from "../constants/appConstants";
-import { labelsForCaste, labelsForResident, lablesForBirthTime, lablesForBirthTimeThree, lablesForBirthTimeTwo, lablesForHandicapped, lablesForHeight } from "../constants/LabelsForFields";
+import {
+  labelsForCaste,
+  labelsForResident,
+  lablesForBirthTime,
+  lablesForBirthTimeThree,
+  lablesForBirthTimeTwo,
+  lablesForHandicapped,
+  lablesForHeight,
+} from "../constants/LabelsForFields";
 import FormArea from "../layout/FormArea";
 
 export default function SignupMain() {
-  const fields = {
-    dbirthDate: null,
-    dbirthTime: "",
-    dbirthTime2: "",
-    dbirthTime3: "",
-    dheight: "",
-    dproperVillage: "",
-    dnickName: "",
-    dbirthDate: "",
-    dresident: "",
-    dresidentOf: "",
-    dcaste: "",
-    dgotra: "",
-    drelatives: "",
-    dannualIncome: "",
-    ddad: "",
-    dmother: "",
-    dhandicapped: "",
-    dhandicappedDetails: "",
-    deducation: "",
-    deducDetails: "",
-    dbusiness: "",
-    dbusinessDet: "",
+  const initialValues = {
+    [appConstants.birthDate]: "",
+    [appConstants.birthTime]: "",
+    [appConstants.birthTime2]: "",
+    [appConstants.birthTime3]: "",
+    [appConstants.height]: "",
+    [appConstants.properVillage]: "",
+    [appConstants.nickName]: "",
+    [appConstants.resident]: "",
+    [appConstants.residentOf]: "",
+    [appConstants.caste]: "",
+    [appConstants.gotra]: "",
+    [appConstants.relatives]: "",
+    [appConstants.annualIncome]: "",
+    [appConstants.dad]: "",
+    [appConstants.mother]: "",
+    [appConstants.handicapped]: "",
+    [appConstants.handicappedDetails]: "",
+    [appConstants.education]: "",
+    [appConstants.educDetails]: "",
+    [appConstants.business]: "",
+    [appConstants.businessDet]: "",
   };
-
-  console.log("fields", fields);
 
   const notRequiredFields = [
     appConstants.birthTime,
@@ -49,131 +54,161 @@ export default function SignupMain() {
 
   const formArea = [
     {
-      field: "CustomDateField",
+      field: appConstants.CustomDateField,
       lengthForDesktop: 12,
       lengthForMobile: 12,
       name: appConstants.birthDate,
-      value: fields.birthDate,
-      errorVal: "birthDate",
+      errorVal: appConstants.birthDate,
+      validations: {},
       optionValues: "",
+      
+      // validations:{
+      //   [appConstants.isRequired]:true,
+      //   [appConstants.min]:3,
+      //   [appConstants.max]:6,
+      //   [appConstants.pattern]:"",
+      //   [appConstants.match]:"",
+      // },
     },
-
     {
-      field: "CustomSelectField",
+      field: appConstants.CustomSelectField,
       lengthForDesktop: 4,
       lengthForMobile: 12,
       name: appConstants.birthTime,
-      value: fields.birthTime,
-      errorVal: "birthTime",
+      errorVal: appConstants.birthTime,
+      validations: {},
       optionValues: lablesForBirthTime,
+      
+      // validations:{
+      //   [appConstants.isRequired]:true,
+      //   [appConstants.min]:3,
+      //   [appConstants.max]:6,
+      //   [appConstants.pattern]:"",
+      //   [appConstants.match]:"",
+      // },
     },
     {
-      field: "CustomSelectField",
+      field: appConstants.CustomSelectField,
       lengthForDesktop: 4,
       lengthForMobile: 12,
       name: appConstants.birthTime2,
-      value: fields.birthTime2,
-      errorVal: "birthTime2",
+      errorVal: appConstants.birthTime2,
       optionValues: lablesForBirthTimeTwo,
+      validations: {},
     },
     {
-      field: "CustomSelectField",
+      field: appConstants.CustomSelectField,
       lengthForDesktop: 4,
       lengthForMobile: 12,
       name: appConstants.birthTime3,
-      value: fields.birthTime3,
-      errorVal: "birthTime3",
+      errorVal: appConstants.birthTime3,
       optionValues: lablesForBirthTimeThree,
+      validations: {},
     },
     {
-      field: "CustomSelectField",
+      field: appConstants.CustomSelectField,
       lengthForDesktop: 12,
       lengthForMobile: 12,
       name: appConstants.height,
-      value: fields.height,
-      errorVal: "height",
+      errorVal: appConstants.height,
       optionValues: lablesForHeight,
+      validations: {},
     },
     {
-      field: "CustomTextField",
+      field: appConstants.CustomTextField,
       lengthForDesktop: 12,
       lengthForMobile: 12,
       name: appConstants.properVillage,
-      value: fields.properVillage,
-      errorVal: "properVillage",
+      errorVal: appConstants.properVillage,
+      validations:{
+        [appConstants.isRequired]:true,
+        [appConstants.min]:3,
+        [appConstants.max]:6,
+        [appConstants.pattern]:"",
+        [appConstants.match]:"",
+      },
       optionValues: "",
     },
     {
-      field: "CustomTextField",
+      field: appConstants.CustomTextField,
       lengthForDesktop: 12,
       lengthForMobile: 12,
       name: appConstants.nickName,
-      value: fields.nickName,
-      errorVal: "nickName",
+      errorVal: appConstants.nickName,
+      validations: {},
       optionValues: "",
     },
     {
-      field: "CustomSelectField",
+      field: appConstants.CustomSelectField,
       lengthForDesktop: 12,
       lengthForMobile: 12,
       name: appConstants.resident,
-      value: fields.resident,
-      errorVal: "resident",
+      errorVal: appConstants.resident,
+      validations: {},
       optionValues: labelsForResident,
     },
     {
-      field: "CustomTextField",
+      field: appConstants.CustomTextField,
       lengthForDesktop: 12,
       lengthForMobile: 12,
       name: appConstants.residentOf,
-      value: fields.residentOf,
-      errorVal: "residentOf",
+      errorVal: appConstants.residentOf,
+      validations: {},
       optionValues: "",
     },
     {
-      field: "CustomSelectField",
+      field: appConstants.CustomSelectField,
       lengthForDesktop: 12,
       lengthForMobile: 12,
       name: appConstants.caste,
-      value: fields.caste,
-      errorVal: "caste",
+      errorVal: appConstants.caste,
+      validations: {},
       optionValues: labelsForCaste,
     },
     {
-      field: "CustomTextField",
+      field: appConstants.CustomTextField,
       lengthForDesktop: 12,
       lengthForMobile: 12,
       name: appConstants.gotra,
-      value: fields.gotra,
-      errorVal: "gotra",
+      errorVal: appConstants.gotra,
+      validations: {},
       optionValues: "",
     },
     {
-      field: "CustomTextField",
+      field: appConstants.CustomTextField,
       lengthForDesktop: 12,
       lengthForMobile: 12,
       name: appConstants.relatives,
-      value: fields.relatives,
-      errorVal: "relatives",
+      errorVal: appConstants.relatives,
+      validations: {},
       optionValues: "",
     },
     {
-      field: "CustomSelectField",
+      field: appConstants.CustomSelectField,
       lengthForDesktop: 12,
       lengthForMobile: 12,
       name: appConstants.annualIncome,
-      value: fields.annualIncome,
-      errorVal: "annualIncome",
+      errorVal: appConstants.annualIncome,
+      validations: {},
       optionValues: labelsForCaste,
     },
     {
-      field: "CustomRadioButton",
+      field: appConstants.CustomRadioButton,
       lengthForDesktop: 12,
       lengthForMobile: 12,
       name: appConstants.handicapped,
-      value: fields.handicapped,
-      errorVal: "handicapped",
+      errorVal: appConstants.handicapped,
+      validations: {},
       optionValues: lablesForHandicapped,
+    },
+    {
+      field: appConstants.SubmitButton,
+      lengthForDesktop: 12,
+      lengthForMobile: 12,
+      name: appConstants.SubmitButton,
+      errorVal: "",
+      validations: {},
+      optionValues: "",
     },
   ];
 
@@ -191,11 +226,11 @@ export default function SignupMain() {
           </Typography>
         </CenterItem>
 
-        <FormArea 
+        <FormArea
           formArea={formArea}
-          fields={fields}
+          fields={initialValues}
           notRequiredFields={notRequiredFields}
-           />
+        />
         {/* <Button
           type="submit"
           fullWidth

@@ -10,6 +10,8 @@ export const errorsLisMh = {
     [appConstants.sirname]:"आडनाव आवश्यक आहे",
     [appConstants.sirnameLength]:"कृपया योग्य माहिती नमूद करा",
 
+    [appConstants.properVillage]:"xxx आवश्यक आहे",
+
     [appConstants.mobileNumber]:"मोबाईल नंबर आवश्यक आहे",
     [appConstants.mobileNumberPattern]:"मोबाईल नंबर हा दहा अंकी आवश्यक आहे",
 

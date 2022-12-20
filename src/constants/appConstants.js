@@ -41,6 +41,16 @@ export const appConstants = {
     cityPref:"cityPref",
     special:"special",
     profileReSubnit:"profileReSubnit",
+    CustomDateField:"CustomDateField",
+    CustomSelectField:"CustomSelectField",
+    CustomTextField:"CustomTextField",
+    CustomRadioButton:"CustomRadioButton",
+    SubmitButton:"SubmitButton",
+    isRequired:"isRequired",
+    min:"min",
+    max:"max",
+    pattern:"pattern",
+    match:"match",
 
     //select fields
 }

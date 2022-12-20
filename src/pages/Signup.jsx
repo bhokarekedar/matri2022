@@ -210,7 +210,7 @@ export default function Signup() {
             {t("nameRegister")}
           </Typography>
         </CenterItem>
-        <FormArea data={formArea} />
+        {/* <FormArea data={formArea} /> */}
         {/* <Grid container spacing={2} sx={{ mt: 1 }}>
 
           {formArea.map(
