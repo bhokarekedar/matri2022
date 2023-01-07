@@ -5,10 +5,10 @@ import { routes } from './routes/routes';
 // import ErrorBoundary from './components/ErrorBoundary';
 import FallBackLoader from './components/FallBackLoader';
 import ResponsiveAppBar from './components/Appbar';
-import Login from './pages/Login';
+import HomePage from './pages/HomePage';
 
 function Main() {
-    const [IsAuthenticated, setIsAuthenticated] = useState(true)
+    const [IsAuthenticated, setIsAuthenticated] = useState(false)
 
     return (
         <>
@@ -18,9 +18,8 @@ function Main() {
                     <ResponsiveAppBar />
                     <Routes>
                         {routes.map((Item, index) => (
-                           IsAuthenticated ? <Route key={index} path={Item.path} element={<Item.Component />}>
-                            </Route> : <Route path="/login" element={<Login />}>
-                            </Route>
+                          <Route key={index} path={Item.path} element={<Item.Component />}>
+                            </Route> 
                         ))}
                     </Routes>
                 </BrowserRouter>

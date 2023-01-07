@@ -1,13 +1,14 @@
 import React from 'react'
 import Typography from '@mui/material/Typography';
 import CircleIcon from '@mui/icons-material/Circle';
+import Container from '@mui/material/Container';
 
 function MidBannerCard({ Icdata }) {
 
-    return (<>
-        <div style={{ position: "relative", }}>
+    return (<Container maxWidth="sm">
+        <div style={{ position: "relative", left: "20%"}}>
             <CircleIcon sx={{ color: "#000", fontSize: 200 }} />
-            <div style={{ position: "absolute", left: "32%", top: "33%" }}>
+            <div style={{ position: "absolute", left: "22%", top: "33%" }}>
                 <Icdata.icon sx={{ color: "#757ce8", fontSize: 70 }} />
             </div>
         </div>
@@ -17,7 +18,8 @@ function MidBannerCard({ Icdata }) {
         <Typography sx={{ textAlign: 'center' }} variant="body1" component="div">
             {Icdata.description}
         </Typography>
-    </>
+        
+        </Container>
     )
 }
 

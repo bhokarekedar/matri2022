@@ -20,7 +20,6 @@ function Item(props) {
 
 function HedaerTitle({ val }) {
     let { colorVal, variant, title } = val;
-    debugger;
     let colorValue = colorVal !== undefined ? colorVal : "#ba000d";
     return (
         <div style={{ width: '100%' }}>

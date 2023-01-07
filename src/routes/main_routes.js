@@ -20,7 +20,7 @@ export const main_routes = [
         Component: Users
     },
     {
-        path: "/Login",
+        path: "/login",
         Component: Login
     },
     {

@@ -1,303 +1,152 @@
 import React, { useState, useEffect } from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import { useTranslation } from "react-i18next";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-
-import { useNavigate } from "react-router-dom";
-import CustomTextField from "../customFields/CustomTextField";
-import validate from "../helper/validator";
-
-import useForm from "../customHooks/useForm";
-import FormLayout from "../layout/FormLayout";
-import CenterItem from "../layout/CenterItem";
-import FullHeight from "../layout/FullHeight";
-import CustomRadioButton from "../customFields/CustomRadioButton";
-import CustomSelectField from "../customFields/CustomSelectField";
-import CustomCheckBox from "../customFields/CustomCheckBox";
-import { appConstants } from "../constants/appConstants";
-import { errorsLisMh, errorsListEn } from "../constants/errorMessages";
-import FormArea from "../layout/FormArea";
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {useDispatch, useSelector, shallowEqual} from'react-redux';
+import { useNavigate } from 'react-router-dom';
+import {http} from '../http-common';
 
 function Copyright(props) {
-  const { t } = useTranslation();
   return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {t("Copyright")}
-      <Link color="inherit" href="">
-        {t("bhoiMangalVivah")}
-      </Link>{" "}
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://bhoimangalvivah.com">
+        Bhoi Mangal Vivah
+      </Link>{' '}
       {new Date().getFullYear()}
-      {"."}
+      {'.'}
     </Typography>
   );
 }
 
-export default function Signup() {
-  const [isDisabled, setIsDisabled] = useState(true);
-  const { t, i18n } = useTranslation();
+const theme = createTheme();
 
-  const lablesForRadio = ["Male", "Female"];
-  const valuesForSelectField = ["unamrried", "widower", "widow", "divorced"];
-  const errorList = {};
-  const fields = {
-    [appConstants.firstname]: "",
-    [appConstants.fathersName]: "",
-    [appConstants.sirname]: "",
-    [appConstants.mobileNumber]: "",
-    [appConstants.email]: "",
-    [appConstants.password]: "",
-    [appConstants.cpassword]: "",
-    [appConstants.gender]: "Female",
-    [appConstants.maritalStatus]: "",
-  };
-  const errorsArray = i18n.language == "mh" ? errorsLisMh : errorsListEn;
+export default function SignIn() {
+  const errorSet = {
+    email: null,
+    password: null,
+    generatl: null
+  }
+  const hasErrorInField = {
+    email: false,
+    password: false,
+    generatl: false
+  }
+  const [errors, setErrors] = useState(errorSet);
+  const [hasError, setHasError] = useState(hasErrorInField);
+  let navigate = useNavigate();
 
-  useEffect(() => {
-    for (const field in fields) {
-      for (const error in errorsArray) {
-        if (error.includes("Length") && `${field}Length` === error) {
-          errorList[error] = errorsArray[error];
-        }
-        if (error.includes("Pattern") && `${field}Pattern` === error) {
-          errorList[error] = errorsArray[error];
-        }
-        if (error.includes("Match") && `${field}Match` === error) {
-          errorList[error] = errorsArray[error];
-        }
-        if (error === field) {
-          errorList[field] = errorsArray[error];
-        }
-      }
+
+  const handleSubmit =async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const obj = {
+      email: data.get('email'),
+      password: data.get('password'),
     }
-  }, [errorList, errorsArray]);
+    const response = await http.post("auth/register", obj)
+    console.log("responseForRegsiter", response)
+    if(response.status == 201){
+      localStorage.setItem("tokenBhoi", response?.data);
+      setHasError(false);
+      navigate("/profile");
 
-  const notRequiredFields = [appConstants.fathersName];
-  const [checked, setChecked] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
-  const { handleChangeForTextField, values, errors, hasError, errorsArea } =
-    useForm(validate, fields, notRequiredFields, errorList);
-
-  //console.log("values", values, errors);
-  const handleChangeForCheckBox = (event) => {
-    setChecked(event.target.checked);
-  };
-
-  useEffect(() => {
-    if (checked && Object.keys(errorsArea).length === 0) {
-      setIsDisabled(false);
     }
-    if (!checked) {
-      setIsDisabled(true);
+    else if(response.status == 409){
+      setHasError(true);
+      errorSet.generatl = response.data
+      setErrors(errorSet);
     }
-  }, [checked, errorsArea]);
-
-  const handleSubmit = (e) => {
-    if (hasError) {
-      setErrorMessage(true);
-    }
-    if (!hasError && checked && Object.keys(errorsArea).length === 0) {
-      setErrorMessage(false);
-      alert("ggg");
+    else{
+      errorSet.generatl = response.data
+      setHasError(true);
     }
   };
 
-  const formArea = [
-    {
-      field: "CustomTextField",
-      lengthForDesktop: 12,
-      lengthForMobile: 12,
-      name: appConstants.firstname,
-      value: values.firstname,
-      errorVal: "firstname",
-      optionValues: "",
-    },
-    {
-      field: "CustomTextField",
-      lengthForDesktop: 12,
-      lengthForMobile: 12,
-      name: appConstants.fathersName,
-      value: values.fathersName,
-      errorVal: "fathersName",
-      optionValues: "",
-    },
-    {
-      field: "CustomTextField",
-      lengthForDesktop: 12,
-      lengthForMobile: 12,
-      name: appConstants.sirname,
-      value: values.sirname,
-      errorVal: "sirname",
-      optionValues: "",
-    },
-    {
-      field: "CustomTextField",
-      lengthForDesktop: 12,
-      lengthForMobile: 12,
-      name: appConstants.mobileNumber,
-      value: values.mobileNumber,
-      errorVal: "mobileNumber",
-      optionValues: "",
-    },
-    {
-      field: "CustomTextField",
-      lengthForDesktop: 12,
-      lengthForMobile: 12,
-      name: appConstants.email,
-      value: values.email,
-      errorVal: "email",
-      optionValues: "",
-    },
-    {
-      field: "CustomTextField",
-      lengthForDesktop: 12,
-      lengthForMobile: 12,
-      name: appConstants.password,
-      value: values.password,
-      errorVal: "password",
-      optionValues: "",
-    },
-    {
-      field: "CustomTextField",
-      lengthForDesktop: 12,
-      lengthForMobile: 12,
-      name: appConstants.cpassword,
-      value: values.cpassword,
-      errorVal: "cpassword",
-      optionValues: "",
-    },
-    {
-      field: "CustomRadioButton",
-      lengthForDesktop: 12,
-      lengthForMobile: 12,
-      name: appConstants.gender,
-      value: values.gender,
-      errorVal: "gender",
-      optionValues: lablesForRadio,
-    },
-    {
-      field: "CustomSelectField",
-      lengthForDesktop: 12,
-      lengthForMobile: 12,
-      name: appConstants.maritalStatus,
-      value: values.maritalStatus,
-      errorVal: "maritalStatus",
-      optionValues: valuesForSelectField,
-    },
-
-    
-  ];
-
+  
 
   return (
-    <FullHeight>
-      <FormLayout>
-        <CenterItem>
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-        </CenterItem>
-        <CenterItem>
           <Typography component="h1" variant="h5">
-            {t("nameRegister")}
+            Sign in
           </Typography>
-        </CenterItem>
-        {/* <FormArea data={formArea} /> */}
-        {/* <Grid container spacing={2} sx={{ mt: 1 }}>
-
-          {formArea.map(
-            (
-              {
-                field,
-                name,
-                lengthForDesktop,
-                lengthForMobile,
-                value,
-                errorVal,
-                optionValues,
-              }
-            ) => {
-              if (field === "CustomDateField") {
-                return (
-                  <Grid item xs={lengthForMobile} md={lengthForDesktop}>
-                    <CustomDateField
-                      label={t(name)}
-                      name={name}
-                      id={name}
-                      value={value}
-                      handleChange={(e) => {
-                        handleChange(e, name);
-                      }}
-                      helperText={errors?.[errorVal]}
-                      hasError={hasError}
-                    />
-                  </Grid>
-                );
-              } else if (field === "CustomSelectField") {
-                return (
-                  <Grid item xs={lengthForMobile} md={lengthForDesktop}>
-                    <CustomSelectField
-                      label={t(name)}
-                      name={name}
-                      value={value}
-                      helperText={errors?.[errorVal]}
-                      valuesForSelectField={optionValues}
-                      handleChange={handleChange}
-                      hasError={hasError}
-                    />
-                  </Grid>
-                );
-              } else if (field === "CustomTextField") {
-                return (
-                  <Grid item xs={lengthForMobile} md={lengthForDesktop}>
-                    <CustomTextField
-                      label={t(name)}
-                      name={name}
-                      id={name}
-                      value={value}
-                      handleChange={handleChange}
-                      helperText={errors?.[errorVal]}
-                      hasError={hasError}
-                    />
-                  </Grid>
-                );
-              } else if (field === "CustomRadioButton") {
-                return ( 
-                 <Grid item xs={lengthForMobile} md={lengthForDesktop}>
-                <CustomRadioButton
-                  label={t(name)}
-                  name={name}
-                  id={name}
-                  value={value}
-                  lablesForRadio={optionValues}
-                  handleChange={handleChange}
-                />
-                 </Grid>
-                  );
-              }
-            }
-          )}
-        </Grid> */}
-
-        <Button
-          type="submit"
-          fullWidth
-         // disabled={isDisabled}
-          onClick={handleSubmit}
-          variant="contained"
-          sx={{ mt: 2, mb: 2 }}
-        >
-          {t("signup")}
-        </Button>
-      </FormLayout>
-    </FullHeight>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              helperText={errors.email}
+              error={hasError.email}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              helperText={errors.generatl}
+              error={hasError.password}
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+        <Copyright sx={{ mt: 8, mb: 4 }} />
+      </Container>
+    </ThemeProvider>
   );
 }
+

@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 import ProfileCard from "../components/ProfileCard";
 import Grid from '@mui/material/Grid';
 import HttpService from "../util/http";
-import { FetchUser } from '../redux/userSlice';
+import FetchUser  from '../features/user/userSlice';
 import { useSelector, useDispatch } from 'react-redux'
 import ImageCard from '../components/ImageCard';
 import Button from '@mui/material/Button';

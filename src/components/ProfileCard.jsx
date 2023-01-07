@@ -7,7 +7,6 @@ import Grid from '@mui/material/Grid';
 
 
 function ProfileCard(props) {
-    debugger;
     console.log("propss", props);
 
     return (

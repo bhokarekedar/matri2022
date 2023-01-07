@@ -8,6 +8,7 @@ export default function ImageCard({ data }) {
     // console.log("props", props);
     return (
         <Card
+        raised={false}
         //sx={{ maxWidth: 400 }}
         >
             <CardActionArea>
@@ -19,10 +20,10 @@ export default function ImageCard({ data }) {
                     alt={data.description}
                 />
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
+                    <Typography textAlign={"center"} gutterBottom variant="h5" component="div">
                         {data.header}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography textAlign={"center"} variant="body2" color="text.secondary">
                         {data.description}
                     </Typography>
                 </CardContent>

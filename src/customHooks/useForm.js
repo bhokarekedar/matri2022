@@ -86,9 +86,6 @@ const useForm = (fields, notRequiredFields, errorList, formArea) => {
     });
   }, [formArea]);
 
-  setTimeout(() => {
-    console.log("errorsList", errorsList);
-  }, 2000);
 
   const handleChange = async (e, nameForDate = "") => {
     let name = "";
@@ -150,7 +147,7 @@ const useForm = (fields, notRequiredFields, errorList, formArea) => {
     values,
     errors,
     hasError,
-    // errorsArea
+    //errorsArea
   };
 };
 

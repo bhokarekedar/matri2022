@@ -19,10 +19,11 @@ function CustomTextField({
   let hasError = true;
   
   if(validations[appConstants.isRequired]){
-    // setHasError(true);
+    setHasError(true);
     // setHelperText("gggg");
     helperText = "jjjj";
   }else{
+    setHasError(false);
     helperText = "";
   }
   

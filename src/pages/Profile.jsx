@@ -5,33 +5,26 @@ import { useTranslation } from "react-i18next";
 import ProfileCard from "../components/ProfileCard";
 import Grid from '@mui/material/Grid';
 import HttpService from "../util/http";
-import { FetchUser } from '../redux/userSlice';
+import {userInfo}  from '../features/user/userSlice';
 import { useSelector, useDispatch } from 'react-redux'
 import ImageCard from '../components/ImageCard';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+
+
 function Profile() {
     const theme = useTheme();
     const matchessm = useMediaQuery(theme.breakpoints.down('sm'));
     const { t } = useTranslation(['Labels', 'MenuLabels', 'Errors']);
-    const user = useSelector((state) => state.user.userInfo);
+    const user = useSelector((state) => state.user);
 
-    let { name, username, email } = user
-    let id = 1;
     //const [data, setdata] = useState({})
     const dispatch = useDispatch();
 
     useEffect(() => {
-        fetchData();
+        dispatch(userInfo());
     }, [])
-
-    const fetchData = async () => {
-        let result = await HttpService.GetData(`users/${id}`);
-        dispatch(FetchUser(result.data));
-
-
-    }
 
     function isRealValue(obj) {
         return obj && obj !== 'null' && obj !== 'undefined';
@@ -43,11 +36,11 @@ function Profile() {
 
             title: "about",
             questionOne: "whats the name",
-            answerOne: user.name,
+            answerOne: user?.userInfo?.id,
             questionTwo: "whats the name",
-            answerTwo: user.email,
+            answerTwo: user?.userInfo?.id,
             questionThree: "whats the name",
-            answeThree: user.username,
+            answeThree: user?.userInfo?.id,
             btnLabel: "gggh",
             ownProfile: true
 
@@ -55,11 +48,11 @@ function Profile() {
         {
             title: "about",
             questionOne: "whats the name",
-            answerOne: user.name,
+            answerOne: user?.userInfo?.id,
             questionTwo: "whats the name",
-            answerTwo: user.email,
+            answerTwo: user?.userInfo?.id,
             questionThree: "whats the name",
-            answeThree: user.username,
+            answeThree:user?.userInfo?.id,
             btnLabel: "gggh",
             ownProfile: true
 
@@ -67,9 +60,9 @@ function Profile() {
         {
             title: "home",
             questionOne: "whats the name",
-            answerOne: user.email,
+            answerOne: user?.userInfo?.id,
             questionTwo: "whats the name",
-            answerTwo: user.name,
+            answerTwo: user?.userInfo?.id,
             btnLabel: "gggh",
             ownProfile: true
 
@@ -77,11 +70,11 @@ function Profile() {
         {
             title: "ff",
             questionOne: "whats the name",
-            answerOne: user.username,
+            answerOne: user?.userInfo?.id,
             questionTwo: "whats the name",
-            answerTwo: user.email,
+            answerTwo: user?.userInfo?.id,
             questionThree: "whats the name",
-            answeThree: user.name,
+            answeThree: user?.userInfo?.id,
             btnLabel: "gggh",
             ownProfile: true
         },
@@ -146,7 +139,7 @@ function Profile() {
                 {profileQuestionAns.map((val, index) => {
                     return (
                         <Grid item xs={12} sm={6} md={6} >
-                            {isRealValue(user) && <ProfileCard val={val} index={index} />}
+                            {isRealValue(user?.userInfo) && <ProfileCard val={val} index={index} />}
                         </Grid>
                     )
                 })}
