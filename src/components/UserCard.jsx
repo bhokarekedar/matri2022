@@ -12,6 +12,7 @@ function UserCard(props) {
 
 const handleClick = (id) => {
 navigate(`/UserInfo/${id}`, { state: id });
+
 }
     return (
         <Container maxWidth="xs">

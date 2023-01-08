@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useDispatch, useSelector, shallowEqual} from'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {http} from '../http-common';
+import {isLoggedIn}  from '../features/auth/authSlice';
 
 function Copyright(props) {
   return (
@@ -32,6 +33,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn() {
+  const dispatch = useDispatch();
   const errorSet = {
     email: null,
     password: null,
@@ -59,6 +61,7 @@ export default function SignIn() {
     if(response.status == 201){
       localStorage.setItem("tokenBhoi", response?.data);
       setHasError(false);
+      dispatch(isLoggedIn())
       navigate("/profile");
 
     }

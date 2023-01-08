@@ -1,22 +1,28 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { userInfoApi, getAllUsersApi } from "./userApi";
+import { userInfoApi, getAllUsersApi, getUserByIdApi } from "./userApi";
 
 const initialState = {
   userInfo: {},
   allUserInfo: {},
+  getUserByIdInfo: {},
   hasError: false,
   errorMessage: null,
   userInfoState: "idle",
-  allUserInfoState: "idle"
+  allUserInfoState: "idle",
+  getUserByIdState: "idle",
 };
 export const userInfo = createAsyncThunk("userInfo/fetchUserInfo", async () => {
   const response = await userInfoApi();
   return response;
 });
 
-export const allUserInfo = createAsyncThunk("userInfo/fetAllUsers", async (pageNumber) => {
-  const response = await getAllUsersApi(pageNumber);
-  console.log(response);
+export const allUserInfo = createAsyncThunk("userInfo/fetAllUsers", async () => {
+  const response = await getAllUsersApi();
+  return response;
+});
+
+export const getUserById = createAsyncThunk("userInfo/getUserById", async (data) => {
+  const response = await getUserByIdApi(data);
   return response;
 });
 
@@ -64,6 +70,28 @@ const userInfoSlice = createSlice({
     },
     [allUserInfo.rejected]: (state, action) => {
       state.allUserInfoState = "rejected";
+      state.hasError = true;
+      state.errorMessage = action.payload.data;
+    },
+
+     //getUserByIdInfo
+     [getUserById.pending]: (state, action) => {
+      state.getUserByIdState = "pending";
+    },
+    [getUserById.fulfilled]: (state, action) => {
+      if (action.payload.status == 200) {
+        state.getUserByIdInfo = action.payload.data;
+        state.hasError = false;
+        state.errorMessage = null;
+        state.getUserByIdState = "fulfilled";
+      } else {
+        state.getUserByIdState = "rejected";
+        state.hasError = true;
+        state.errorMessage = action.payload.data;
+      }
+    },
+    [getUserById.rejected]: (state, action) => {
+      state.getUserByIdState = "rejected";
       state.hasError = true;
       state.errorMessage = action.payload.data;
     },

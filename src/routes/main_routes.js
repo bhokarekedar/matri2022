@@ -31,6 +31,10 @@ export const main_routes = [
         path: "/SignupMain",
         Component: SignupMain
     },
+    //   {
+    //     path: "/UserInfo",
+    //     Component: UserInfo
+    // }
     {
         path: "/UserInfo/:id",
         Component: UserInfo

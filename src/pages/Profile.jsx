@@ -6,7 +6,7 @@ import ProfileCard from "../components/ProfileCard";
 import Grid from '@mui/material/Grid';
 import HttpService from "../util/http";
 import {userInfo}  from '../features/user/userSlice';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 import ImageCard from '../components/ImageCard';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';

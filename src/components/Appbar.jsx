@@ -10,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-
+import { useSelector } from 'react-redux'
 //drawer
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import PersonIcon from '@mui/icons-material/Person';
@@ -73,6 +73,11 @@ const authPages = [
       icon: <PersonIcon/>
     },
     {
+      label: "स्थळे",
+      item: "Users",
+      icon: <PersonIcon/>
+    },
+    {
       label: "लॉगऑऊट",
       item: "Logout",
       icon: <LogoutIcon/>
@@ -85,7 +90,9 @@ export default function ElevateAppBar(props) {
   const [openLogindrawer, setOpenLogindrawer] = React.useState(false);
   const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
   const [openSignupDialog, setOpenSignupDialog] = React.useState(false);
-
+  const isLoggedIn = useSelector((state) => state.authUser.isLoggedIn);
+ 
+  let pagesVal  = isLoggedIn ? authPages : pages;
   const handleClickOpenSignupDialog = () => {
     setOpenLoginDialog(false);
     setOpenSignupDialog(true);
@@ -136,7 +143,7 @@ export default function ElevateAppBar(props) {
   const list = () => (
     <Box sx={{ width: 200 }} role="presentation">
       <MenuList>
-        {pages.map((val, index) => (
+        {pagesVal.map((val, index) => (
           <MenuItem
             key={index}
             onClick={(e) => {
@@ -186,7 +193,7 @@ export default function ElevateAppBar(props) {
                   </SwipeableDrawer>
                 </Box>
                 <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                  {pages.map((page) => (
+                  {pagesVal.map((page) => (
                     <Button
                       key={page}
                       onClick={(e) => RedirectToPage(e, page.item)}

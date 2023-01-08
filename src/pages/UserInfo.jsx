@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 import ProfileCard from "../components/ProfileCard";
 import Grid from '@mui/material/Grid';
 import HttpService from "../util/http";
-import FetchUser  from '../features/user/userSlice';
+import { getUserById }  from '../features/user/userSlice';
 import { useSelector, useDispatch } from 'react-redux'
 import ImageCard from '../components/ImageCard';
 import Button from '@mui/material/Button';
@@ -17,24 +17,18 @@ function UserInfo() {
     const theme = useTheme();
     const matchessm = useMediaQuery(theme.breakpoints.down('sm'));
     const { t } = useTranslation(['Labels', 'MenuLabels', 'Errors']);
-    const user = useSelector((state) => state.user.userInfo);
+    const user = useSelector((state) => state.user);
     const location = useLocation();
-    let { name, username, email } = user
-    //const [data, setdata] = useState({})
     const dispatch = useDispatch();
-
     useEffect(() => {
-        fetchData();
-    }, [])
+     const data = {
+         id : location.state
+     }
+      dispatch(getUserById(data));
+  }, [])
+   console.log(user)
+    //const [data, setdata] = useState({})
 
-    const fetchData = async () => {
-        let result = await HttpService.GetData(`users/${location.state.id}`);
-        dispatch(FetchUser(result.data));
-
-        setTimeout(() => {
-            console.log("user", user);
-        }, 5000);
-    }
 
     function isRealValue(obj) {
         return obj && obj !== 'null' && obj !== 'undefined';

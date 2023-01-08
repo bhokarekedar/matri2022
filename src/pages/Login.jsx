@@ -16,6 +16,7 @@ import {useDispatch, useSelector, shallowEqual} from'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {http} from '../http-common';
 import ErrorField from "../components/errorField";
+import {isLoggedIn}  from '../features/auth/authSlice';
 
 function Copyright(props) {
   return (
@@ -33,6 +34,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
+  const dispatch = useDispatch();
   const errorSet = {
     email: null,
     password: null,
@@ -61,6 +63,7 @@ export default function Login() {
     console.log("responsefrom login", response)
     if(response.status == 200){
       localStorage.setItem("tokenBhoi", response?.data);
+      dispatch(isLoggedIn())
       setHasError(false);
       navigate("/profile");
 
